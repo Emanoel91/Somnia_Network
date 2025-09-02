@@ -122,8 +122,6 @@ with col1:
     fig = px.bar(agg_sf, x="Date", y="Txns", color="Txn Success", title="Number of Transactions by Success Over Time", barmode="stack")
     st.plotly_chart(fig, use_container_width=True)
 
-with col2:
-    # گروه‌بندی و محاسبه درصد تراکنش‌های موفق و ناموفق برای هر روز
 agg_pct = agg_sf.groupby(["Date", "Txn Success"])["Txns"].sum().reset_index()
 agg_pct["Pct"] = agg_pct.groupby("Date")["Txns"].apply(lambda x: x / x.sum() * 100)
 
