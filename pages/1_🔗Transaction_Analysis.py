@@ -4,6 +4,13 @@ import requests
 import plotly.express as px
 import plotly.graph_objects as go
 
+# --- Page Config: Tab Title & Icon ---
+st.set_page_config(
+    page_title="Somnia Network Performance Analysis",
+    page_icon="https://somnia.network/images/branding/somnia_logo_color.png",
+    layout="wide"
+)
+
 # ============================
 # API URLs
 # ============================
