@@ -102,13 +102,13 @@ col6.metric("Max Daily Transactions", f"{max_daily:,}")
 # Third Row Charts
 col7, col8 = st.columns(2)
 
-# Bar-Line Chart
-bar = alt.Chart(df_tf).mark_bar(color="#4C78A8").encode(
+# Bar-Line Chart with adjusted bar width
+bar = alt.Chart(df_tf).mark_bar(color="#4C78A8", size=20).encode(
     x=alt.X("Date:T", title="Date"),
     y=alt.Y("txns:Q", title="Transactions"),
 )
 
-line = alt.Chart(df_tf).mark_line(color="red").encode(
+line = alt.Chart(df_tf).mark_line(color="red", point=True).encode(
     x="Date:T",
     y=alt.Y("cumulative_txns:Q", title="Cumulative Transactions", axis=alt.Axis(titleColor="red"))
 )
@@ -122,7 +122,7 @@ chart_bar_line = alt.layer(bar, line).resolve_scale(y="independent").properties(
 col7.altair_chart(chart_bar_line, use_container_width=True)
 
 # TPS Line Chart
-chart_tps = alt.Chart(df_tf).mark_line(color="#72B7B2").encode(
+chart_tps = alt.Chart(df_tf).mark_line(color="#72B7B2", point=True).encode(
     x="Date:T",
     y=alt.Y("tps:Q", title="TPS")
 ).properties(
