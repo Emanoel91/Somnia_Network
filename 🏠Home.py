@@ -79,25 +79,26 @@ st.markdown(
 st.markdown(
     """
     <div style="background-color: #b3ffc8; padding: 15px; border-radius: 10px; border: 1px solid #000000;">
-        Somnia is a fast and powerful blockchain designed to handle lots of transactions quickly, even when things get really busy. 
-        Unlike other blockchains that try to split work across multiple computer cores (parallel execution), Somnia focuses on making 
-        a single core work super fast. This makes it great for situations where many transactions are related, like during big NFT sales 
-        or busy trading on decentralized exchanges (DEXs).
+        <p>
+        <strong>Somnia</strong> is a fast and powerful blockchain built to process a very high volume of transactions, even under heavy load. 
+        Unlike many blockchains that rely on parallel execution across multiple cores, 
+        <strong>Somnia</strong> focuses on making a single core run extremely fast. 
+        This makes it especially effective for scenarios with highly related transactions, such as <strong>large NFT drops</strong> 
+        or <strong>busy decentralized exchange (DEX) trading</strong>.
+        </p>
 
-        Key features of Somnia:
-        Works with Ethereum: Somnia can run Ethereum smart contracts, so it’s compatible with tools and apps built for Ethereum.
-        Super-Fast Compiler: Somnia has a special tool that converts Ethereum code into instructions a computer can run much faster. 
-        For example, it can process millions of token transfers per second, each taking just a fraction of a second.
-        Smart Use of CPU Power: Somnia uses the computer’s ability to do multiple tasks at once within a single core. For example, when 
-        swapping tokens, it can do some steps at the same time, cutting the time it takes in half.
-        Handles Busy Moments: When lots of transactions are trying to update the same thing (like during a big NFT drop), Somnia keeps things 
-        fast and smooth, unlike other blockchains that slow down.
-        Saves Resources: Somnia only uses its fast compiler for contracts that get used a lot, and switches to a slower but cheaper method for less common ones.
+        <h4><strong>Key Features of Somnia:</strong></h4>
+        <ul>
+            <li><strong>Ethereum Compatibility:</strong> Runs Ethereum smart contracts, making it fully compatible with Ethereum tools and applications.</li>
+            <li><strong>Super-Fast Compiler:</strong> Translates Ethereum code into ultra-efficient instructions, enabling millions of token transfers per second with sub-second execution.</li>
+            <li><strong>Smart CPU Utilization:</strong> Optimizes single-core multitasking—for example, overlapping steps in token swaps to cut processing time in half.</li>
+            <li><strong>High-Load Resilience:</strong> Maintains speed and smooth performance during network spikes, such as major NFT sales.</li>
+            <li><strong>Resource Efficiency:</strong> Uses its fast compiler only for frequently executed contracts, while defaulting to a lighter method for less common ones.</li>
+        </ul>
     </div>
     """,
     unsafe_allow_html=True
 )
-
 
 # --- Links with Logos ---
 st.markdown(
