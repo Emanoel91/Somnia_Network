@@ -21,12 +21,12 @@ def load_data(url):
 
 # Transactions data
 transactions = load_data(API_TXNS)
-transactions["Date"] = pd.to_datetime(transactions["Date"])
+transactions["Date"] = pd.to_datetime(transactions["Date"]).dt.tz_localize('UTC')
 transactions = transactions.rename(columns={"Number of Txns": "Txns"})
 
 # Success/Fail data
 transactions_sf = load_data(API_TXNS_SUCCESS)
-transactions_sf["Date"] = pd.to_datetime(transactions_sf["Date"])
+transactions_sf["Date"] = pd.to_datetime(transactions_sf["Date"]).dt.tz_localize('UTC')
 transactions_sf = transactions_sf.rename(columns={"Number of Txns": "Txns"})
 
 # ============================
@@ -42,10 +42,14 @@ with col2:
 with col3:
     time_frame = st.selectbox("Time Frame", ["day", "week", "month"])
 
-mask = (transactions["Date"] >= pd.Timestamp(start_date)) & (transactions["Date"] <= pd.Timestamp(end_date))
+# Convert to timezone-aware timestamps
+start_ts = pd.to_datetime(start_date).tz_localize('UTC')
+end_ts = pd.to_datetime(end_date).tz_localize('UTC') + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1)
+
+mask = (transactions["Date"] >= start_ts) & (transactions["Date"] <= end_ts)
 transactions = transactions.loc[mask]
 
-mask_sf = (transactions_sf["Date"] >= pd.Timestamp(start_date)) & (transactions_sf["Date"] <= pd.Timestamp(end_date))
+mask_sf = (transactions_sf["Date"] >= start_ts) & (transactions_sf["Date"] <= end_ts)
 transactions_sf = transactions_sf.loc[mask_sf]
 
 # ============================
