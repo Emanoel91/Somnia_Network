@@ -123,8 +123,21 @@ with col1:
     st.plotly_chart(fig, use_container_width=True)
 
 with col2:
-    fig = px.bar(agg_sf, x="Date", y="Txns", color="Txn Success", title="Normalized Transactions by Success Over Time", barmode="relative")
-    fig.update_layout(yaxis=dict(tickformat="%"))
+    # گروه‌بندی و محاسبه درصد تراکنش‌های موفق و ناموفق برای هر روز
+agg_pct = agg_sf.groupby(["Date", "Txn Success"])["Txns"].sum().reset_index()
+agg_pct["Pct"] = agg_pct.groupby("Date")["Txns"].apply(lambda x: x / x.sum() * 100)
+
+with col2:
+    fig = px.bar(
+        agg_pct,
+        x="Date",
+        y="Pct",
+        color="Txn Success",
+        title="Percentage of Transactions by Success Over Time",
+        barmode="stack",  # ستون‌ها روی هم انباشته می‌شوند
+        text=agg_pct["Pct"].round(1).astype(str) + "%"  # نمایش درصد روی ستون‌ها
+    )
+    fig.update_yaxes(tickformat="%")
     st.plotly_chart(fig, use_container_width=True)
 
 # Row: KPIs for success/fail
