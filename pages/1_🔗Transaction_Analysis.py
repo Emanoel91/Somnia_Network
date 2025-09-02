@@ -147,7 +147,19 @@ with col1:
     st.plotly_chart(fig, use_container_width=True)
 
 with col2:
-    agg_rate = agg_sf.groupby("Date").apply(lambda x: x.loc[x["Txn Success"]==True, "Txns"].sum()/x["Txns"].sum() if x["Txns"].sum()>0 else 0).reset_index(name="Success Rate")
-    fig = px.scatter(agg_rate, x="Date", y="Success Rate", size="Success Rate", title="Transaction Success Rate Over Time")
-    fig.update_yaxes(tickformat="%")
-    st.plotly_chart(fig, use_container_width=True)
+    agg_rate = agg_sf.groupby("Date").apply(
+    lambda x: x.loc[x["Txn Success"]==True, "Txns"].sum()/x["Txns"].sum() 
+    if x["Txns"].sum()>0 else 0
+    ).reset_index(name="Success Rate")
+
+# تغییر به نمودار خطی
+    fig = px.line(
+       agg_rate, 
+       x="Date", 
+       y="Success Rate", 
+       title="Transaction Success Rate Over Time",
+       markers=True  # اگر میخوای نقاط هم روی خط نمایش داده بشه
+   )
+
+   fig.update_yaxes(tickformat="%")
+   st.plotly_chart(fig, use_container_width=True)
