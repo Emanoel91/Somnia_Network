@@ -158,7 +158,7 @@ fig_bar_line.add_trace(go.Scatter(x=df_tf["Date"], y=df_tf["cumulative_txns"], n
 
 fig_bar_line.update_layout(
     title="Number of Transactions Over Time",
-    xaxis=dict(title="Date"),
+    xaxis=dict(title=" "),
     yaxis=dict(title="Txns count"),
     yaxis2=dict(title="Txns count", overlaying="y", side="right"),
     bargap=0.2,
