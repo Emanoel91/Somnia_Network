@@ -13,7 +13,7 @@ def load_data():
     r = requests.get(url)
     data = r.json()["result"]["rows"]
     df = pd.DataFrame(data)
-    df["Date"] = pd.to_datetime(df["Date"])
+    df["Date"] = pd.to_datetime(df["Date"], utc=True)
     df = df.rename(columns={"Number of Txns": "txns"})
     return df
 
@@ -42,7 +42,8 @@ def compute_kpis(df_day):
     avg_daily = df_day["txns"].mean()
     median_daily = df_day["txns"].median()
     max_daily = df_day["txns"].max()
-    tps = total_txns / ((df_day["Date"].max() - df_day["Date"].min()).days * 24 * 60 * 60)
+    days_range = (df_day["Date"].max() - df_day["Date"].min()).days
+    tps = total_txns / (days_range * 24 * 60 * 60) if days_range > 0 else 0
     
     # تغییرات روزانه به درصد
     df_day = df_day.sort_values("Date")
@@ -59,15 +60,23 @@ df = load_data()
 
 st.title("📊 Somnia Network Transactions Dashboard")
 
-# Sidebar Filters
-st.sidebar.header("Filters")
-min_date, max_date = df["Date"].min(), df["Date"].max()
-start_date = st.sidebar.date_input("Start Date", min_date, min_value=min_date, max_value=max_date)
-end_date = st.sidebar.date_input("End Date", max_date, min_value=min_date, max_value=max_date)
-timeframe = st.sidebar.selectbox("Time Frame", ["day", "week", "month"], index=0)
+# Main page filters
+st.subheader("Filters")
+min_date, max_date = df["Date"].min().date(), df["Date"].max().date()
+col_f1, col_f2, col_f3 = st.columns([1,1,1])
+with col_f1:
+    start_date = st.date_input("Start Date", min_date, min_value=min_date, max_value=max_date)
+with col_f2:
+    end_date = st.date_input("End Date", max_date, min_value=min_date, max_value=max_date)
+with col_f3:
+    timeframe = st.selectbox("Time Frame", ["day", "week", "month"], index=0)
+
+# Convert inputs to tz-aware timestamps
+start_ts = pd.to_datetime(start_date).tz_localize('UTC')
+end_ts = pd.to_datetime(end_date).tz_localize('UTC') + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1)
 
 # Filter Data
-mask = (df["Date"] >= pd.to_datetime(start_date)) & (df["Date"] <= pd.to_datetime(end_date))
+mask = (df["Date"] >= start_ts) & (df["Date"] <= end_ts)
 df_filtered = df.loc[mask]
 
 # Aggregations
@@ -123,4 +132,3 @@ chart_tps = alt.Chart(df_tf).mark_line(color="#72B7B2").encode(
 )
 
 col8.altair_chart(chart_tps, use_container_width=True)
-
