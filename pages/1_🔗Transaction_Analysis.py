@@ -123,7 +123,9 @@ with col1:
     st.plotly_chart(fig, use_container_width=True)
 
 agg_pct = agg_sf.groupby(["Date", "Txn Success"])["Txns"].sum().reset_index()
-agg_pct["Pct"] = agg_pct.groupby("Date")["Txns"].apply(lambda x: x / x.sum() * 100)
+
+# تبدیل به درصد روزانه با transform
+agg_pct["Pct"] = agg_pct.groupby("Date")["Txns"].transform(lambda x: x / x.sum() * 100)
 
 with col2:
     fig = px.bar(
@@ -132,8 +134,8 @@ with col2:
         y="Pct",
         color="Txn Success",
         title="Percentage of Transactions by Success Over Time",
-        barmode="stack",  # ستون‌ها روی هم انباشته می‌شوند
-        text=agg_pct["Pct"].round(1).astype(str) + "%"  # نمایش درصد روی ستون‌ها
+        barmode="stack",
+        text=agg_pct["Pct"].round(1).astype(str) + "%"
     )
     fig.update_yaxes(tickformat="%")
     st.plotly_chart(fig, use_container_width=True)
