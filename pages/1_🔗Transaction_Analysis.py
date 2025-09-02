@@ -122,7 +122,7 @@ chart_bar_line = alt.layer(bar, line).resolve_scale(y="independent").properties(
 col7.altair_chart(chart_bar_line, use_container_width=True)
 
 # TPS Line Chart
-chart_tps = alt.Chart(df_tf).mark_line(color="#72B7B2", point=True).encode(
+chart_tps = alt.Chart(df_tf).line(color="#72B7B2", point=True).encode(
     x="Date:T",
     y=alt.Y("tps:Q", title="TPS")
 ).properties(
