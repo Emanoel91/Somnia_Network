@@ -21,12 +21,12 @@ def load_data(url):
 
 # Transactions data
 transactions = load_data(API_TXNS)
-transactions["Date"] = pd.to_datetime(transactions["Date"]).dt.tz_localize('UTC')
+transactions["Date"] = pd.to_datetime(transactions["Date"])  # Already tz-aware from API
 transactions = transactions.rename(columns={"Number of Txns": "Txns"})
 
 # Success/Fail data
 transactions_sf = load_data(API_TXNS_SUCCESS)
-transactions_sf["Date"] = pd.to_datetime(transactions_sf["Date"]).dt.tz_localize('UTC')
+transactions_sf["Date"] = pd.to_datetime(transactions_sf["Date"])  # Already tz-aware from API
 transactions_sf = transactions_sf.rename(columns={"Number of Txns": "Txns"})
 
 # ============================
@@ -42,7 +42,7 @@ with col2:
 with col3:
     time_frame = st.selectbox("Time Frame", ["day", "week", "month"])
 
-# Convert to timezone-aware timestamps
+# Convert filter dates to UTC-aware
 start_ts = pd.to_datetime(start_date).tz_localize('UTC')
 end_ts = pd.to_datetime(end_date).tz_localize('UTC') + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1)
 
