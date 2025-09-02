@@ -112,7 +112,7 @@ def compute_kpis(df_day):
 df = load_data()
 
 # Main page filters
-st.subheader("Filters")
+
 min_date, max_date = df["Date"].min().date(), df["Date"].max().date()
 col_f1, col_f2, col_f3 = st.columns([1,1,1])
 with col_f1:
