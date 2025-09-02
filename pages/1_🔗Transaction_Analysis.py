@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
-import altair as alt
+import plotly.graph_objects as go
 from datetime import datetime
 
 # ----------------------
@@ -29,9 +29,9 @@ def aggregate(df, timeframe):
         df_agg = df.resample("M", on="Date").agg({"txns": "sum"}).reset_index().sort_values("Date")
     else:
         df_agg = df.copy()
-    
+
     df_agg["cumulative_txns"] = df_agg["txns"].cumsum()
-    df_agg["tps"] = df_agg["txns"] / (24*60*60)  # تراکنش در ثانیه
+    df_agg["tps"] = df_agg["txns"] / (24*60*60)
     return df_agg
 
 # ----------------------
@@ -44,12 +44,11 @@ def compute_kpis(df_day):
     max_daily = df_day["txns"].max()
     days_range = (df_day["Date"].max() - df_day["Date"].min()).days
     tps = total_txns / (days_range * 24 * 60 * 60) if days_range > 0 else 0
-    
-    # تغییرات روزانه به درصد
+
     df_day = df_day.sort_values("Date")
     df_day["pct_change"] = df_day["txns"].pct_change()
     avg_change_pct = df_day["pct_change"].mean() * 100
-    
+
     return total_txns, avg_change_pct, tps, avg_daily, median_daily, max_daily
 
 # ----------------------
@@ -71,11 +70,9 @@ with col_f2:
 with col_f3:
     timeframe = st.selectbox("Time Frame", ["day", "week", "month"], index=0)
 
-# Convert inputs to tz-aware timestamps
 start_ts = pd.to_datetime(start_date).tz_localize('UTC')
 end_ts = pd.to_datetime(end_date).tz_localize('UTC') + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1)
 
-# Filter Data
 mask = (df["Date"] >= start_ts) & (df["Date"] <= end_ts)
 df_filtered = df.loc[mask]
 
@@ -102,33 +99,30 @@ col6.metric("Max Daily Transactions", f"{max_daily:,}")
 # Third Row Charts
 col7, col8 = st.columns(2)
 
-# Bar-Line Chart with adjusted bar width
-bar = alt.Chart(df_tf).mark_bar(color="#4C78A8", size=20).encode(
-    x=alt.X("Date:T", title="Date"),
-    y=alt.Y("txns:Q", title="Transactions"),
-)
+# Bar + Line Chart (Transactions and Cumulative)
+fig_bar_line = go.Figure()
+fig_bar_line.add_trace(go.Bar(x=df_tf["Date"], y=df_tf["txns"], name="Transactions", marker_color="#4C78A8"))
+fig_bar_line.add_trace(go.Scatter(x=df_tf["Date"], y=df_tf["cumulative_txns"], name="Cumulative Transactions", mode="lines", yaxis="y2", line=dict(color="red")))
 
-line = alt.Chart(df_tf).mark_line(color="red").encode(
-    x="Date:T",
-    y=alt.Y("cumulative_txns:Q", title="Cumulative Transactions", axis=alt.Axis(titleColor="red"))
-)
-
-chart_bar_line = alt.layer(bar, line).resolve_scale(y="independent").properties(
+fig_bar_line.update_layout(
     title="Number of Transactions Over Time",
-    width=400,
-    height=300
+    xaxis=dict(title="Date"),
+    yaxis=dict(title="Transactions"),
+    yaxis2=dict(title="Cumulative Transactions", overlaying="y", side="right"),
+    bargap=0.2,
+    height=400
 )
 
-col7.altair_chart(chart_bar_line, use_container_width=True)
+col7.plotly_chart(fig_bar_line, use_container_width=True)
 
 # TPS Line Chart
-chart_tps = alt.Chart(df_tf).mark_line(color="#72B7B2").encode(
-    x="Date:T",
-    y=alt.Y("tps:Q", title="TPS")
-).properties(
+fig_tps = go.Figure()
+fig_tps.add_trace(go.Scatter(x=df_tf["Date"], y=df_tf["tps"], mode="lines", name="TPS", line=dict(color="#72B7B2")))
+fig_tps.update_layout(
     title="Transaction per Second (TPS) Over Time",
-    width=400,
-    height=300
+    xaxis=dict(title="Date"),
+    yaxis=dict(title="TPS"),
+    height=400
 )
 
-col8.altair_chart(chart_tps, use_container_width=True)
+col8.plotly_chart(fig_tps, use_container_width=True)
