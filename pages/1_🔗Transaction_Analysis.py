@@ -107,8 +107,8 @@ fig_bar_line.add_trace(go.Scatter(x=df_tf["Date"], y=df_tf["cumulative_txns"], n
 fig_bar_line.update_layout(
     title="Number of Transactions Over Time",
     xaxis=dict(title="Date"),
-    yaxis=dict(title="Transactions"),
-    yaxis2=dict(title="Cumulative Transactions", overlaying="y", side="right"),
+    yaxis=dict(title="Txns count"),
+    yaxis2=dict(title="Txns count", overlaying="y", side="right"),
     bargap=0.2,
     height=400
 )
@@ -120,8 +120,8 @@ fig_tps = go.Figure()
 fig_tps.add_trace(go.Scatter(x=df_tf["Date"], y=df_tf["tps"], mode="lines", name="TPS", line=dict(color="#72B7B2")))
 fig_tps.update_layout(
     title="Transaction per Second (TPS) Over Time",
-    xaxis=dict(title="Date"),
-    yaxis=dict(title="TPS"),
+    xaxis=dict(title=" "),
+    yaxis=dict(title="Txns count"),
     height=400
 )
 
