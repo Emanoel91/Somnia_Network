@@ -103,8 +103,8 @@ with col1:
     fig.add_bar(x=agg["Date"], y=agg["Txns"], name="Transactions", marker_color="#636EFA")
     fig.add_trace(go.Scatter(x=agg["Date"], y=agg["Cumulative"], name="Cumulative Txns", yaxis="y2", mode="lines", line=dict(color="red")))
     fig.update_layout(title="Number of Transactions Over Time",
-                      yaxis=dict(title="Transactions"),
-                      yaxis2=dict(title="Cumulative", overlaying="y", side="right"))
+                      yaxis=dict(title="Txns count"),
+                      yaxis2=dict(title="Txns count", overlaying="y", side="right"))
     st.plotly_chart(fig, use_container_width=True)
 
 with col2:
