@@ -4,6 +4,60 @@ import requests
 import plotly.graph_objects as go
 from datetime import datetime
 
+# --- Page Config: Tab Title & Icon ---
+st.set_page_config(
+    page_title="Somnia Network Performance Analysis",
+    page_icon="https://somnia.network/images/branding/somnia_logo_color.png",
+    layout="wide"
+)
+
+# --- Title with Logo ---
+st.title("🔗Transaction Analysis")
+
+# --- Sidebar Footer Slightly Left-Aligned ---------------------------------------------------------------------------------------------------------
+st.sidebar.markdown(
+    """
+    <style>
+    .sidebar-footer {
+        position: fixed;
+        bottom: 20px;
+        width: 250px;
+        font-size: 13px;
+        color: gray;
+        margin-left: 5px; # -- MOVE LEFT
+        text-align: left;  
+    }
+    .sidebar-footer img {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+    .sidebar-footer a {
+        color: gray;
+        text-decoration: none;
+    }
+    </style>
+
+    <div class="sidebar-footer">
+        <div>
+            <a href="https://x.com/Somnia_Network" target="_blank">
+                <img src="https://somnia.network/images/branding/somnia_logo_color.png" alt="Somnia Logo">
+                Powered by Somnia
+            </a>
+        </div>
+        <div style="margin-top: 5px;">
+            <a href="https://x.com/0xeman_raz" target="_blank">
+                <img src="https://pbs.twimg.com/profile_images/1841479747332608000/bindDGZQ_400x400.jpg" alt="Eman Raz">
+                Built by Eman Raz
+            </a>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 # ----------------------
 # Load Data from API
 # ----------------------
@@ -56,8 +110,6 @@ def compute_kpis(df_day):
 # ----------------------
 
 df = load_data()
-
-st.title("📊 Somnia Network Transactions Dashboard")
 
 # Main page filters
 st.subheader("Filters")
