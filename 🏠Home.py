@@ -86,7 +86,6 @@ st.markdown(
         This makes it especially effective for scenarios with highly related transactions, such as <strong>large NFT drops</strong> 
         or <strong>busy decentralized exchange (DEX) trading</strong>.
         </p>
-
         <h4><strong>Key Features of Somnia:</strong></h4>
         <ul>
             <li><strong>Ethereum Compatibility:</strong> Runs Ethereum smart contracts, making it fully compatible with Ethereum tools and applications.</li>
